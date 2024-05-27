@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .static {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .tempest {
+      list-style-type: none;
+      padding: 0;
+      background-color: #eee;
+      overflow: hidden;
+    }
+
+    .tempest li {
+      float: left;
+    }
+
+    .tempest li a {
+      display: block;
+      color: #333;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .tempest li a:hover {
+      background-color: #ddd;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Crear Reserva Hospedaje</title>
+</head>
+<body>
+<div class="static">
+  <h2>Crear Reserva Hospedaje</h2>
+</div>
+
+<ul class="tempest">
+  <li><a href="/reservaHospedaje/listar-hospedaje">Reservar Hospedaje</a></li>
+  <li><a href="/reservaHospedaje/listar-reserva-hospedaje">Modificar Hospedaje</a></li>
+  <li><a href="/ReservaAutomovil/listar-automovil">Reservar Automóvil</a></li>
+  <li><a href="/CompraPlan/listar-plan">Comprar Planes</a></li>
+  <li><a href="/CompraPlan/listar-compra-plan">Cancelar Planes</a></li>
+  <li><a href="/CompraArticulo/listar-articulo">Comprar Articulo</a></li>
+</ul>
+<div class="p-5 mx-5">
+  <form action="#" th:action="@{/reservaHospedaje/guardar-reserva-hospedaje}" th:object="${reserva}" method="POST">
+    <div class="row g-2 mb-5 justify-content-center">
+      <div class="col px-3">
+        <div class="mb-3">
+          <label class="form-label" for="fechaReserva">Fecha de entrada</label>
+          <input class="form-control" type="date" id="fechaReserva" th:field="*{fechaReserva}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="cantPersonas">Cantidad de personas</label>
+          <input class="form-control" type="number" id="cantPersonas" th:field="*{cantidadPersonas}">
+        </div>
+      </div>
+      <div class="col px-3">
+        <div class="mb-3">
+          <label class="form-label" for="fechaFinEntrega">Fecha de salida</label>
+          <input class="form-control" type="date" id="fechaFinEntrega" th:field="*{fechaFinEntrega}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="tipoRegimen">Tipo de regimen</label>
+          <select class="form-select" id="tipoRegimen">
+            <!--<option value="">-Seleccione una opción-</option>-->
+            <option th:each="tipoRegimen:${tiposRegimen}" th:value="${tipoRegimen.getCodigoTipoRegimen()}"
+                    th:text="${tipoRegimen.getNombre()}"></option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 mb-5 justify-content-center">
+      <div class="col px-3">
+        <div>
+          <h2>Habitaciones</h2>
+        </div>
+        <div class="mb-3" th:each="habitacion:${tiposHabitacion}">
+          <input class="form-check-input" type="checkbox" name="habitaciones" th:id="${habitacion.getCodigoHabitacion()}"
+                 th:value="${habitacion.getCodigoHabitacion()}">
+          <label class="form-check-label" th:for="${habitacion.getCodigoHabitacion()}"
+                 th:text="${habitacion.getNombre() + ' | ' + habitacion.getNivel().getNombre() + ' | $' + habitacion.getPrecio()}"></label>
+        </div>
+      </div>
+
+    </div>
+    <div class="row g-2 mb-5 justify-content-center">
+      <div class="col px-3">
+        <div>
+          <h2>Cliente</h2>
+        </div>
+        <label class="form-label" for="cliente">Nombre Completo</label>
+        <select class="form-select" id="cliente" th:field="*{codigoCliente}">
+          <!--<option value="">-Seleccione una opción-</option>-->
+          <option th:each="cliente:${clientes}" th:value="${cliente.getCodigoCliente()}"
+                  th:text="${cliente.getPersona().getNombre()}"></option>
+        </select>
+      </div>
+      <div class="col px-3">
+        <div>
+          <h2>Empleado</h2>
+        </div>
+        <label class="form-label" for="empleado">Nombre Completo</label>
+        <select class="form-select" id=empleado th:field="*{codigoEmpleado}">
+          <!--<option value="">-Seleccione una opción-</option>-->
+          <option th:each="empleado:${empleados}" th:value="${empleado.getCodigoEmpleado()}"
+                  th:text="${empleado.getPersona().getNombre()}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="row g-2 mb-5 justify-content-center">
+      <div class="col-6 px-3">
+        <div>
+          <h2>Agencia</h2>
+        </div>
+        <select class="form-select" id=agencia th:field="*{codigoAgencia}">
+          <!--<option value="">-Seleccione una opción-</option>-->
+          <option th:each="agencia:${agencias}" th:value="${agencia.getCodigo()}"
+                  th:text="${agencia.getNombre()}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="row g-2 justify-content-end">
+      <div class="d-flex">
+        <span><strong>Nota:</strong> En caso de entregar la reserva fuera de la fecha acordada se le cobrará un costo por mora de </span>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="number" class="form-control" th:field="*{costoMoraDia}" placeholder="Costo mora día">
+        </div>
+      </div>
+      <div class="my-4">
+        <button type="submit" class="btn btn-success">Reservar</button>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

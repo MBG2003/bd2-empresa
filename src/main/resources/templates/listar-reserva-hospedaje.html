@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .static {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .tempest {
+            list-style-type: none;
+            padding: 0;
+            background-color: #eee;
+            overflow: hidden;
+        }
+
+        .tempest li {
+            float: left;
+        }
+
+        .tempest li a {
+            display: block;
+            color: #333;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .tempest li a:hover {
+            background-color: #ddd;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Reservar hospedaje</title>
+</head>
+<body>
+<div class="static">
+    <h2>Reservas de Hospedaje</h2>
+</div>
+
+<ul class="tempest">
+    <li><a href="/reservaHospedaje/listar-hospedaje">Reservar Hospedaje</a></li>
+    <li><a href="/reservaHospedaje/listar-reserva-hospedaje">Modificar Hospedaje</a></li>
+    <li><a href="/ReservaAutomovil/listar-automovil">Reservar Automóvil</a></li>
+    <li><a href="/CompraPlan/listar-plan">Comprar Planes</a></li>
+    <li><a href="/CompraPlan/listar-compra-plan">Cancelar Planes</a></li>
+    <li><a href="/CompraArticulo/listar-articulo">Comprar Articulo</a></li>
+</ul>
+<div class="p-5">
+    <table class="table table-hover table-striped-columns table-bordered">
+        <thead>
+            <tr class="table-info">
+                <th scope="col">Código</th>
+                <th scope="col">Agencia</th>
+                <th scope="col">Empleado</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Costo Mora Día</th>
+                <th scope="col">Cantidad Personas</th>
+                <th scope="col">Fecha Reserva</th>
+                <th scope="col">Fecha Realización</th>
+                <th scope="col">Fecha Fin Entrega</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="reserva:${reservas}">
+                <td th:text="${reserva.getCodigoReservaHospedaje()}"></td>
+                <td th:text="${reserva.getAgencia().getNombre()}"></td>
+                <td th:text="${reserva.getEmpleado().getPersona().getNombre()}"></td>
+                <td th:text="${reserva.getCliente().getPersona().getNombre()}"></td>
+                <td th:text="${'$' + reserva.getCostoMoraDia()}"></td>
+                <td th:text="${reserva.getCantidadPersonas()}"></td>
+                <td th:text="${#dates.format(reserva.getFechaReserva(), 'dd-MMM-yyyy')}"></td>
+                <td th:text="${#dates.format(reserva.getFechaRealizacion(), 'dd-MMM-yyyy')}"></td>
+                <td th:text="${#dates.format(reserva.getFechaFinEntrega(), 'dd-MMM-yyyy')}"></td>
+                <td class="text-center"><a class="btn btn-primary" th:href="@{/reservaHospedaje/actualizar-reserva-Hospedaje/{codigoReserva}(codigoReserva=${reserva.getCodigoReservaHospedaje() })}">Actualizar</a></td>
+                <td class="text-center"><a class="btn btn-danger" th:href="@{/reservaHospedaje/cancelar-reserva-hospedaje/{codigoReserva}(codigoReserva=${reserva.getCodigoReservaHospedaje()})}">Cancelar</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .static {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .tempest {
+            list-style-type: none;
+            padding: 0;
+            background-color: #eee;
+            overflow: hidden;
+        }
+
+        .tempest li {
+            float: left;
+        }
+
+        .tempest li a {
+            display: block;
+            color: #333;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .tempest li a:hover {
+            background-color: #ddd;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Menú</title>
+</head>
+<body>
+
+<div class="static">
+    <h2>Comprar Articulo</h2>
+</div>
+
+<ul class="tempest">
+    <li><a href="/reservaHospedaje/listar-hospedaje">Reservar Hospedaje</a></li>
+    <li><a href="/reservaHospedaje/listar-reserva-hospedaje">Modificar Hospedaje</a></li>
+    <li><a href="/ReservaAutomovil/listar-automovil">Reservar Automóvil</a></li>
+    <li><a href="/CompraPlan/listar-plan">Comprar Planes</a></li>
+    <li><a href="/CompraPlan/listar-compra-plan">Cancelar Planes</a></li>
+    <li><a href="/CompraArticulo/listar-articulo">Comprar Articulo</a></li>
+</ul>
+
+<!--<table class="table table-hover">
+    <thead>
+    <tr class="table-info">
+        <th scope="col">Código</th>
+        <th scope="col">Agencia</th>
+        <th scope="col">Empleado</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Fecha Reserva</th>
+        <th scope="col">Fecha Realización</th>
+        <th scope="col">Fecha Fin Entrega</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="articulo:${articulos}">
+        <td th:text="${articulos.get}"></td>
+        <td th:text="${articulos.getAgencia().getNombre()}"></td>
+        <td th:text="${articulos.getCodigoEmpleado()}"></td>
+        <td th:text="${articulos.getCodigoCliente()}"></td>
+        <td th:text="${articulos.getFechaReserva()}"></td>
+        <td th:text="${articulos.getFechaRealizacion()}"></td>
+        <td th:text="${articulos.getFechaFinEntrega()}"></td>
+        <td><button class="btn btn-danger" onclick="">Eliminar</button></td>
+    </tr>
+    </tbody>
+</table>-->
+
+<div class="p-5">
+    <form action="#" th:action="@{/comprarArticulo/guardar-compra-articulos}" th:object="${compraArticulo}" method="POST">
+        <div class="row g-2 mb-5 justify-content-center">
+            <div class="col px-3">
+                <div class="mb-3">
+                    <div>
+                        <h2>Articulo</h2>
+                    </div>
+                    <div>
+                        <span th:text="'Precio Unidad: $' + ${articulo.getPrecio()}"></span>
+                    </div>
+                    <div>
+                        <label class="form-label" >Cantidad :</label>
+                        <input class="form-control" type="number" id="cantidad" th:field="*{cantidadPersonas}">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row g-2 mb-5 justify-content-center">
+            <div class="col px-3">
+                <div>
+                    <h2>Cliente</h2>
+                </div>
+                <label class="form-label" for="cliente">Nombre Completo</label>
+                <select class="form-select" id="cliente" th:field="*{codigoCliente}">
+                    <!--<option value="">-Seleccione una opción-</option>-->
+                    <option th:each="cliente:${clientes}" th:value="${cliente.getCodigoCliente()}"
+                            th:text="${cliente.getPersona().getNombre()}"></option>
+                </select>
+            </div>
+            <div class="col px-3">
+                 <div>
+                     <h2>Empleado</h2>
+                 </div>
+                 <label class="form-label" for="empleado">Nombre Completo</label>
+                 <select class="form-select" id=empleado th:field="*{codigoEmpleado}">
+                     <!--<option value="">-Seleccione una opción-</option>-->
+                     <option th:each="empleado:${empleados}" th:value="${empleado.getCodigoEmpleado()}"
+                             th:text="${empleado.getPersona().getNombre()}"></option>
+                 </select>
+             </div>
+        </div>
+        <div class="row g-2 justify-content-end">
+            <div class="my-4">
+                <button type="submit" class="btn btn-success">Comprar</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
